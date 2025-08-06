@@ -7,9 +7,15 @@ public class Carro {
     private TanqueCombustivel tanque;
 
     public Carro(String modelo, TipoCombustivel tipoCombustivel, int consumoMotor, int capacidadeTanque) {
+        
         this.modelo = modelo;
         motor = new Motor(tipoCombustivel, consumoMotor);
-        tanque = new TanqueCombustivel(tipoCombustivel, capacidadeTanque);
+        if (modelo.equals("SUV")){
+            tanque = new TanqueCombustivel(TipoCombustivel.FLEX, capacidadeTanque);
+        }
+        else{ 
+            tanque = new TanqueCombustivel(tipoCombustivel, capacidadeTanque);
+        }
     }
 
 
