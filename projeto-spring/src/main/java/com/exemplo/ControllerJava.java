@@ -1,96 +1,61 @@
-// package com.exemplo;
-
-// import org.springframework.web.bind.annotation.CrossOrigin;
-// import org.springframework.web.bind.annotation.GetMapping;
-// import org.springframework.web.bind.annotation.RestController;
-
-// @RestController
-// @CrossOrigin("*")
-// public class ControllerJava {
-
-//         Livro livro1 = new Livro(1, "O Pequeno Príncipe", "Antoine de Saint-Exupéry", 1943);
-//         Livro livro2 = new Livro(2, "1984", "George Orwell", 1949);
-//         Livro livro3 = new Livro(3, "Dom Quixote", "Miguel de Cervantes", 1605);
-//         Livro livro4 = new Livro(4, "O Senhor dos Anéis", "J.R.R. Tolkien", 1954);
-//         Livro livro5 = new Livro(5, "A Arte da Guerra", "Sun Tzu", 500); 
-
-//         List<Livro> listaDeLivros = new LinkedList<>();
-
-//         listaDeLivros.add(livro1);
-//         listaDeLivros.add(livro2);
-//         listaDeLivros.add(livro3);
-//         listaDeLivros.add(livro4);
-//         listaDeLivros.add(livro5);
-
-//         @GetMapping()
-//         public String GetMapping() {
-//             return "Está funcionando";
-//         }
-
-//         @GetMapping("livros")
-//         public List<Livro> GetListaLivros(){
-//             return listaDeLivros;
-//         }
-
-//         @GetMapping("LivroAutor")
-//         public List<Livro> getLivrosDoAutor(@RequestParam(value="autor") String autor) {
-//             String aux = autor.trim();
-//             return listaDeLivros.stream()
-//             .filter(livro -> livro.autor.equals(aux))
-//             .toList();
-//         }
-
-        
-//         @GetMapping("LivroAno")
-//         public List<Livro> getLivrosDoAno(@RequestParam(value="ano") int ano) {
-//             return listaDeLivros.stream()
-//             .filter(livro -> livro.getAno() == ano)
-//             .toList();
-//         }
-
-//         @Post()
-//         public void CadadastraLivro(Livro livro){
-//             listaLivro.add(livro);
-//             return;
-//         }
-// }
-
-
-
 package com.exemplo;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 @RestController
-@RequestMapping("/api/livros")
-@CrossOrigin("*")
-public class LivroController {
-    
+public class ControllerJava {
+    private IAcervoRepository livros;
+
     @Autowired
-    private LivroService livroService;
+    public ControllerJava(IAcervoRepository livros) {
+        this.livros = livros; 
+    }
 
-    @GetMapping
+    @GetMapping("")
+    @CrossOrigin(origins = "*")
+    public String mensagemDeBemVindo() {
+        return "Bem vindo a biblioteca central!";
+    }
+
+    @GetMapping("livros")
+    @CrossOrigin(origins = "*")
     public List<Livro> getListaLivros() {
-        return livroService.findAllLivros();
+        return livros.getAll();
     }
 
-    @GetMapping("/autor")
+    @GetMapping("autores")
+    @CrossOrigin(origins = "*")
+    public List<String> getListaAutores() {
+        return livros.getAutores();
+    }
+
+    @GetMapping("livrosAutor")
+    @CrossOrigin(origins = "*")
     public List<Livro> getLivrosDoAutor(@RequestParam(value = "autor") String autor) {
-        return livroService.findLivrosByAutor(autor);
+        return livros.getLivrosDoAutor(autor);
     }
 
-    @GetMapping("/ano")
-    public List<Livro> getLivrosDoAno(@RequestParam(value = "ano") int ano) {
-        return livroService.findLivrosByAno(ano);
+    @GetMapping("/livrosautor/{autor}/ano/{ano}")
+    @CrossOrigin(origins = "*")
+    public List<Livro> getLivrosDoAutor(@PathVariable(value="autor") String autor, @PathVariable(value="ano")int ano) {
+        return livros.getLivrosDoAutor(autor)
+                .stream()
+                .filter(l->l.getAno() == ano)
+                .toList();
     }
 
-    @PostMapping
-    public ResponseEntity<Void> cadastraLivro(@RequestBody Livro livro) {
-        livroService.addLivro(livro);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    @PostMapping("/novolivro")
+    @CrossOrigin(origins = "*")
+    public boolean cadastraLivroNovo(@RequestBody final Livro livro) {
+        return livros.cadastraLivroNovo(livro);
     }
 }

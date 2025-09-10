@@ -1,26 +1,19 @@
 package com.exemplo;
 
-
 public class Livro {
-
-    private int id; 
-    private String titulo; 
-    private int ano;
+    private long id;
+    private String titulo;
     private String autor;
+    private int ano;
 
-     public Livro(int id, String titulo, String autor, int ano) {
+    public Livro(long id, String titulo, String autor, int ano) {
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
         this.ano = ano;
     }
-     
-    public Livro() {
-    
-    }
 
-    // Métodos Getters para cada atributo
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -35,5 +28,9 @@ public class Livro {
     public int getAno() {
         return ano;
     }
-}
 
+    @Override
+    public String toString() {
+        return "Livro [id=" + id + ", titulo=" + titulo + ", autor=" + autor + ", ano=" + ano + "]";
+    }
+}
