@@ -57,9 +57,9 @@ public class AcervoMemoriaImpl implements IAcervoRepository {
     }
 
     @Override
-    public boolean cadastraLivroNovo(Livro livro) {
+    public String cadastraLivroNovo(Livro livro) {
         livros.add(livro);
-        return true;
+        return "Livro adicionado com sucesso!";
     }
 
     @Override

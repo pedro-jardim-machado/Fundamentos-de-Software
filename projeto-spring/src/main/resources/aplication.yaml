@@ -6,7 +6,7 @@ spring:
     password:
   sql:
     init:
-      mode: always   # executa schema.sql no boot
+      mode: always
   h2:
     console:
       enabled: true

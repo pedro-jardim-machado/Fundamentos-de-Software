@@ -20,7 +20,7 @@ public class ControllerJava {
         this.livros = livros; 
     }
 
-    @GetMapping("")
+    @GetMapping("/")
     @CrossOrigin(origins = "*")
     public String mensagemDeBemVindo() {
         return "Bem vindo a biblioteca central!";
@@ -55,7 +55,7 @@ public class ControllerJava {
 
     @PostMapping("/novolivro")
     @CrossOrigin(origins = "*")
-    public boolean cadastraLivroNovo(@RequestBody final Livro livro) {
+    public String cadastraLivroNovo(@RequestBody final Livro livro) {
         return livros.cadastraLivroNovo(livro);
     }
 }
